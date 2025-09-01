@@ -1,24 +1,23 @@
-const content = document.getElementById("content")
+import style from "./style.css";
+import homePage from "./pages/home";
+import menuPage from "./pages/menu";
+import aboutPage from "./pages/about";
 
-function createHTMLElementFromString(str) {
-    const [tagClassId, text] = str.split(">")
-    const dotIndex = tagClassId.indexOf(".") !== -1 ? tagClassId.indexOf(".") : tagClassId.length
-    const hashIndex = tagClassId.indexOf("#") !== -1 ? tagClassId.indexOf("#") : tagClassId.length
-    const tag = dotIndex <= hashIndex ? tagClassId.slice(0, dotIndex) : tagClassId.slice(0, hashIndex)
-    const className = dotIndex <= hashIndex ? tagClassId.slice(dotIndex + 1, hashIndex) : tagClassId.slice(dotIndex + 1)
-    const id = hashIndex <= dotIndex ? tagClassId.slice(hashIndex + 1, dotIndex) : tagClassId.slice(hashIndex + 1)
-    const element = document.createElement(tag)
-    if (text) {
-        element.appendChild(document.createTextNode(text))
+function loadPage(page) {
+    if (typeof page === "function") {
+        page = page()
     }
-    if (className) {
-        element.className = className
-    }
-    if (id) {
-        element.id = id
-    }
-    return element
+    const content = document.getElementById("content");
+    content.textContent = ""
+    content.appendChild(page)
 }
 
-const chefs = createHTMLElementFromString
+loadPage(homePage)
 
+const homeBtn = document.getElementById("home-button")
+const menuBtn = document.getElementById("menu-button")
+const aboutBtn = document.getElementById("about-button")
+
+homeBtn.addEventListener("click", () => loadPage(homePage))
+menuBtn.addEventListener("click", () => loadPage(menuPage))
+aboutBtn.addEventListener("click", () => loadPage(aboutPage))
